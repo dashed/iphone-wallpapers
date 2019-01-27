@@ -18,14 +18,23 @@ const settings = {
 const sketch = () => {
   // Picks a random 5 color palette from the library
   const palette = random.pick(palettes);
-  const symbols = ['▬', '‑', '‒', '—', '‑', '‒', '—', '▲', '●'];
+
+  const symbols = [];
+
+  ['🦄', '✨', '🎉'].forEach(symbol => {
+    symbols.push({ value: symbol, weight: 50 });
+  });
+
+  ['▬', '‑', '‒', '—', '‑', '‒', '—', '▲', '●'].forEach(symbol => {
+    symbols.push({ value: symbol, weight: 200 });
+  });
 
   // Create an array of points
   // We want to set up all the data in one place, and keep it separate from the rendering
   // All randomness and generation happens here, not in the render function
   const createGrid = () => {
     const points = [];
-    const count = 60;
+    const count = 45;
 
     // Nested for loop to create x and y coordinates
     for (let x = 0; x < count; x++) {
@@ -41,7 +50,7 @@ const sketch = () => {
           radius: radius,
           color: random.pick(palette),
           rotation: random.noise2D(u, v),
-          character: random.pick(symbols),
+          character: random.weightedSet(symbols),
           postion: [u, v],
         });
       }
@@ -52,12 +61,12 @@ const sketch = () => {
   // Filter will return an array based on the function it recieves
   // Here it's removing grid points randomly, about half
   const points = createGrid().filter(() => random.value() > 0.5);
-  const margin = 100;
+  const margin = 0;
 
   // Returns a function, a render function
   // Feed it "props"
   return ({ context, width, height }) => {
-    context.fillStyle = '#F2F2F2';
+    context.fillStyle = '#212529';
     context.fillRect(0, 0, width, height);
 
     points.forEach(data => {
