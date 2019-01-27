@@ -5,6 +5,7 @@ const canvasSketch = require('canvas-sketch');
 const { lerp } = require('canvas-sketch-util/math');
 const random = require('canvas-sketch-util/random');
 const palettes = require('nice-color-palettes');
+const colorAlpha = require('color-alpha');
 
 const settings = {
   // Defines settings for canvas size, exports, etc
@@ -22,11 +23,11 @@ const sketch = () => {
 
   const symbols = [];
 
-  ['🦄', '✨', '🎉'].forEach(symbol => {
-    symbols.push({ value: symbol, weight: 10 });
+  ['🦄', '✨', '🎉', '💯', '👍'].forEach(symbol => {
+    symbols.push({ value: symbol, weight: 20 });
   });
 
-  ['▬', '‑', '‒', '—', '‑', '‒', '—', '▲', '●'].forEach(symbol => {
+  ['▬', '‑', '‒', '‑', '‒', '—', '▲', '●'].forEach(symbol => {
     symbols.push({ value: symbol, weight: 200 });
   });
 
@@ -46,7 +47,7 @@ const sketch = () => {
         const v = count <= 1 ? 0.5 : y / (count - 1);
 
         // Using 2D noise will return relatively similar values that move slowly between -1 and 1
-        const radius = 0.03 + Math.abs(random.noise2D(u, v, 2) * 0.05);
+        const radius = 0.02 + Math.abs(random.noise2D(u, v, 2) * 0.05);
         points.push({
           radius: radius,
           color: random.pick(palette),
@@ -70,6 +71,17 @@ const sketch = () => {
     context.fillStyle = '#212529';
     context.fillRect(0, 0, width, height);
 
+
+    // Gradient foreground
+    const fill = context.createLinearGradient(0, 0, width, height);
+    fill.addColorStop(0, palette[0]);
+    fill.addColorStop(1, palette[1]);
+
+    // Fill rectangle
+    context.fillStyle = fill;
+    context.fillRect(margin, margin, width - margin * 2, height - margin * 2);
+
+
     points.forEach(data => {
       // Destructure the data parameter so we can access the grid object properties
       const { postion, color, radius, rotation, character } = data;
@@ -83,17 +95,12 @@ const sketch = () => {
       const y = lerp(margin, height - margin, v);
 
       context.save();
-      context.fillStyle = color;
+      context.fillStyle = colorAlpha(color, random.range(0.5, 1));
       context.font = `${radius * width}px "Arial"`;
       context.translate(x, y);
       context.rotate(rotation);
       context.fillText(character, 0, 0);
       context.restore();
-
-      // context.beginPath();
-      // context.arc(x, y, radius * width, 0, Math.PI * 2, false);
-      // context.fillStyle = color;
-      // context.fill();
     });
   };
 };

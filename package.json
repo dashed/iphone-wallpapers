@@ -7,6 +7,7 @@
     "canvas-sketch": "^0.2.0",
     "canvas-sketch-cli": "^1.4.0",
     "canvas-sketch-util": "^1.6.0",
+    "color-alpha": "^1.0.3",
     "nice-color-palettes": "^2.0.0"
   },
   "scripts": {
