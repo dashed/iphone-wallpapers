@@ -18,11 +18,12 @@ const settings = {
 const sketch = () => {
   // Picks a random 5 color palette from the library
   const palette = random.pick(palettes);
+  // const palette = ['#faa2c1', '#be4bdb', '#9775fa', '#228be6', '#d8f5a2', '#e8590c', '#e67700', '#adb5bd']
 
   const symbols = [];
 
   ['🦄', '✨', '🎉'].forEach(symbol => {
-    symbols.push({ value: symbol, weight: 50 });
+    symbols.push({ value: symbol, weight: 10 });
   });
 
   ['▬', '‑', '‒', '—', '‑', '‒', '—', '▲', '●'].forEach(symbol => {
@@ -34,7 +35,7 @@ const sketch = () => {
   // All randomness and generation happens here, not in the render function
   const createGrid = () => {
     const points = [];
-    const count = 45;
+    const count = 70;
 
     // Nested for loop to create x and y coordinates
     for (let x = 0; x < count; x++) {
@@ -61,7 +62,7 @@ const sketch = () => {
   // Filter will return an array based on the function it recieves
   // Here it's removing grid points randomly, about half
   const points = createGrid().filter(() => random.value() > 0.5);
-  const margin = 0;
+  const margin = -10;
 
   // Returns a function, a render function
   // Feed it "props"
